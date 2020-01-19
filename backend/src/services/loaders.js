@@ -1,5 +1,4 @@
 const Dataloader = require('dataloader');
-const uuid = require('uuid/v4');
 
 let requestsLoaders = {};
 
@@ -12,9 +11,9 @@ const resetRequestLoaders = id => {
   delete requestsLoaders[id];
 };
 
-const registerLoader = (loadFn, reqId) => {
-  const reqLoaders = requestsLoaders[reqId];
-  const loaderKey = uuid();
+const registerLoader = (loadFn, keys) => {
+  const reqLoaders = requestsLoaders[keys.reqId];
+  const loaderKey = keys.name;
   return () => {
     if (!(loaderKey in reqLoaders)) reqLoaders[loaderKey] = new Dataloader(loadFn);
     return reqLoaders[loaderKey];
@@ -23,7 +22,7 @@ const registerLoader = (loadFn, reqId) => {
 
 const generateKeys = (row, targetFields) => targetFields.map(fields => row[fields]).join();
 
-const createOneToOneLoader = (query, targetFields, reqId) =>
+const createOneToOneLoader = (query, targetFields, keys) =>
   registerLoader(
     ids =>
       query(ids).then(rows => {
@@ -33,10 +32,10 @@ const createOneToOneLoader = (query, targetFields, reqId) =>
         });
         return ids.map(id => batch[id]);
       }),
-    reqId
+    keys
   );
 
-const createOneToManyLoader = (query, targetFields, reqId) =>
+const createOneToManyLoader = (query, targetFields, keys) =>
   registerLoader(
     ids =>
       query(ids).then(rows => {
@@ -47,7 +46,7 @@ const createOneToManyLoader = (query, targetFields, reqId) =>
         rows.forEach(row => batch[generateKeys(row, targetFields)].push(row));
         return ids.map(id => batch[id]);
       }),
-    reqId
+    keys
   );
 
 module.exports = { startRequestLoaders, resetRequestLoaders, createOneToOneLoader, createOneToManyLoader };

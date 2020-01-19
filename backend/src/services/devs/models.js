@@ -19,6 +19,15 @@ const parsePayload = payload => {
   return parsedPayload;
 };
 
+const devByIdLoader = reqId =>
+  createOneToOneLoader(ids => knex(DEVS).whereIn('id', ids), ['id'], { reqId, name: 'devByIdLoader' });
+
+const devByGithubUsernameLoader = reqId =>
+  createOneToOneLoader(names => knex(DEVS).whereIn('githubUsername', names), ['githubUsername'], {
+    reqId,
+    name: 'devByGithubUsername',
+  });
+
 const Dev = {
   create: payload =>
     knex(DEVS)
@@ -40,12 +49,9 @@ const Dev = {
       .returning('*')
       .then(([record]) => record),
 
-  getById: (id, reqId) => createOneToOneLoader(ids => knex(DEVS).whereIn('id', ids), ['id'], reqId)().load(id),
+  getById: (id, reqId) => devByIdLoader(reqId)().load(id),
 
-  getByGithubUsername: (githubUsername, reqId) =>
-    createOneToOneLoader(names => knex(DEVS).whereIn('githubUsername', names), ['githubUsername'], reqId)().load(
-      githubUsername
-    ),
+  getByGithubUsername: (githubUsername, reqId) => devByGithubUsernameLoader(reqId)().load(githubUsername),
 
   getAll: async () => knex(DEVS).orderBy('id'),
 
