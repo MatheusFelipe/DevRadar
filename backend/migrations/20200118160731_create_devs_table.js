@@ -7,10 +7,10 @@ exports.up = async knex => {
   await this.down(knex);
   await knex.schema.createTable('devs', table => {
     table.increments('id').primary();
-    table.text('name').notNullable();
+    table.text('name');
     table.text('githubUsername').notNullable();
-    table.text('bio').notNullable();
-    table.text('avatarUrl').notNullable();
+    table.text('bio');
+    table.text('avatarUrl');
     table
       .timestamp('createdAt', { useTz: false })
       .notNullable()

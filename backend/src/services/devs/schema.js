@@ -9,10 +9,10 @@ const typeDefs = gql`
   }
   type Dev {
     id: Int!
-    name: String!
+    name: String
     githubUsername: String!
-    bio: String!
-    avatarUrl: String!
+    bio: String
+    avatarUrl: String
     createdAt: String!
     techs: [String!]!
     coordinates: Coordinates!
