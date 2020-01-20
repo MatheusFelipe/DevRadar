@@ -19,6 +19,7 @@ exports.up = async knex => {
       .timestamp('updatedAt', { useTz: false })
       .notNullable()
       .defaultTo(knex.fn.now());
+    table.unique('githubUsername');
   });
   await knex.raw('alter table devs add column coordinates point not null');
   await knex.raw('alter table devs add column techs text[] not null');
