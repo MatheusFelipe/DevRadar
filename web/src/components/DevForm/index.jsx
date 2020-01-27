@@ -70,7 +70,7 @@ const DevForm = ({ onSubmit }) => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    onSubmit({ githubUsername, techs, latitude, longitude }).then(() => {
+    onSubmit({ githubUsername, techs: techs.split(',').map(el => el.trim()), latitude, longitude }).then(() => {
       setGithubUsername('');
       setTechs('');
     });
