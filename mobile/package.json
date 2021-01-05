@@ -15,7 +15,7 @@
     "apollo-link": "^1.2.13",
     "apollo-link-error": "^1.1.12",
     "apollo-link-http": "^1.5.16",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "expo": "~36.0.0",
     "expo-location": "~8.0.0",
     "graphql": "^14.6.0",
